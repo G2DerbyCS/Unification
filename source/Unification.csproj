@@ -65,6 +65,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\Enums\AudioEngineStateEnum.cs" />
+    <Compile Include="Models\Enums\DatasourceFormatEnum.cs" />
     <Compile Include="Models\Interfaces\IMetadataContainer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -93,7 +95,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Models\Enums\" />
     <Folder Include="View Models\Enums\" />
     <Folder Include="Views\" />
   </ItemGroup>
