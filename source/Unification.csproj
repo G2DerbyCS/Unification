@@ -34,6 +34,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ModernWindowFrameLibrary, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Libraries\ModernWindowFrameLibrary.dll</HintPath>
+    </Reference>
     <Reference Include="NAudio">
       <HintPath>Libraries\NAudio.dll</HintPath>
     </Reference>
@@ -62,6 +66,9 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="View Models\MainWindowView.xaml.cs">
+      <DependentUpon>MainWindowView.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -94,13 +101,26 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\Interfaces\" />
+    <Folder Include="Resources\" />
     <Folder Include="View Models\Enums\" />
     <Folder Include="Views\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Libraries\ModernWindowFrameLibrary.dll" />
+    <Content Include="Libraries\ModernWindowFrameLibrary.pdb" />
     <Content Include="Libraries\NAudio.dll" />
     <Content Include="Libraries\NAudio.WindowsMediaFormat.dll" />
     <Resource Include="Libraries\NAudio.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Libraries\Resources\ModernWindowFrameStyleRecourceDictionary.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View Models\MainWindowView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
