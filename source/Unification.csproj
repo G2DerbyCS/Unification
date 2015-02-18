@@ -67,7 +67,8 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="View Models\MainWindowView.xaml.cs">
+    <Compile Include="Models\AudioEngineModel.cs" />
+    <Compile Include="Views\MainWindowView.xaml.cs">
       <DependentUpon>MainWindowView.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
@@ -103,7 +104,6 @@
     <Folder Include="Models\Interfaces\" />
     <Folder Include="Resources\" />
     <Folder Include="View Models\Enums\" />
-    <Folder Include="Views\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Libraries\ModernWindowFrameLibrary.dll" />
@@ -117,7 +117,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="View Models\MainWindowView.xaml">
+    <Page Include="Views\MainWindowView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
