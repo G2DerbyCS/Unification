@@ -1,14 +1,14 @@
 ﻿using NAudio.Wave;
 using NAudio.Wave.SampleProviders;
 using System;
-using Unification.Models.Enums;
+using Unification.Models.AudioEngine.Enums;
 
-namespace Unification.Models
+namespace Unification.Models.AudioEngine
 {
     /// <summary>
     /// A singleton class that obtains access to and outputs audio to a sound device.
     /// </summary>
-    internal class AudioEngine : IDisposable
+    internal class NAudioSink : IDisposable
     {
         /// <summary>
         /// Stores number of audio channels to be output to.
@@ -30,12 +30,7 @@ namespace Unification.Models
         /// </summary>
         private int _SampleRate;
 
-        /// <summary>
-        /// Stores the current state of this AudioEngine instance.
-        /// </summary>
-        private AudioEngineState _State;
-
-        private AudioEngine()
+        private NAudioSink()
         {
             ChannelCount     = 2;     // Assumed safe default value.
             SampleRate       = 44100; // Assumed safe default value.
@@ -46,16 +41,16 @@ namespace Unification.Models
             _OutputDev.Init(_Mixer);
             _OutputDev.Play();
 
-            State = AudioEngineState.Available;
+            State = AudioSinkState.Available;
         }
 
         /// <summary>
         /// Adds an ISampleProvider to the AudioEngine MixingSampleProvider for output.
         /// </summary>
-        /// <param name="Sample">ISampleProvider to be added.</param>
-        public void AddSampleToOutput (ISampleProvider Sample)
+        /// <param name="SampleProvider">ISampleProvider to be added.</param>
+        public void AddSampleToOutput(ISampleProvider SampleProvider)
         {
-            _Mixer.AddMixerInput(Sample);
+            _Mixer.AddMixerInput(SampleProvider);
         }
 
         /// <summary>
@@ -80,22 +75,17 @@ namespace Unification.Models
         }
 
         /// <summary>
-        /// Event to be raised whenever a state change occurs in the audio engine.
-        /// </summary>
-        public event EventHandler<AudioEngineState> EngineStateChangeEvent;
-
-        /// <summary>
         /// Provides an instance of the AudioEngine class.
         /// </summary>
-        public readonly AudioEngine Instance = new AudioEngine();
+        public readonly NAudioSink Instance = new NAudioSink();
 
         /// <summary>
         /// Removes an exsiting ISampleProvider from the AudioEngine MixingSampleProvider.
         /// </summary>
-        /// <param name="Sample">ISampleProvider to be removed.</param>
-        public void RemoveSampleFromOutput(ISampleProvider Sample)
+        /// <param name="SampleProvider">ISampleProvider to be removed.</param>
+        public void RemoveSampleFromOutput(ISampleProvider SampleProvider)
         {
-            _Mixer.RemoveMixerInput(Sample);
+            _Mixer.RemoveMixerInput(SampleProvider);
         }
 
         /// <summary>
@@ -117,20 +107,10 @@ namespace Unification.Models
         /// <summary>
         /// Inicates the current state of this AudioEngine instance.
         /// </summary>
-        public AudioEngineState State
+        public AudioSinkState State
         {
-            private set
-            {
-                if (EngineStateChangeEvent != null)
-                    EngineStateChangeEvent(this, value);
-
-                _State = value;
-            }
-
-            get
-            {
-                return _State;
-            }
+            private set;
+            get;
         }
     }
 }
