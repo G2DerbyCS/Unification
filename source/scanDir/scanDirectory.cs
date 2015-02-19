@@ -8,13 +8,13 @@ namespace scanDirectory
 {
     public class scanDirectory
     {
-        /*Stores the user prodivded dir to be scanned.*/
+        /*Stores the user prodivded directory to be scanned.*/
         public string sourceDir { get; set; }
         /*Stores the type of audio file formats.*/
         public string fileFormat { get; set; }
 
-        /* param name =scanDir
-        Param name = file format
+        /* <param name="sourceDir">Source of directory scanned.</param>
+        <param name="fileFormat">Types of files retreived.</param>
         */
         public string initScanDir(string scanDir, string fileFormat)
         {
