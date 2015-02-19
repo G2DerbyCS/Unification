@@ -93,7 +93,7 @@ namespace Unification.Models.AudioEngine
         /// </summary>
         public int SampleRate
         {
-            set
+            private set
             {
                 _SampleRate = value;
             }

@@ -5,6 +5,8 @@ VisualStudioVersion = 12.0.30501.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unification", "Unification.csproj", "{B14B69C7-D047-4360-A834-9B5BBF302237}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IUnification", "..\..\IUnification\source\IUnification.csproj", "{317BD4C1-A893-4A6D-9EE2-5F33167499F7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{B14B69C7-D047-4360-A834-9B5BBF302237}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B14B69C7-D047-4360-A834-9B5BBF302237}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B14B69C7-D047-4360-A834-9B5BBF302237}.Release|Any CPU.Build.0 = Release|Any CPU
+		{317BD4C1-A893-4A6D-9EE2-5F33167499F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{317BD4C1-A893-4A6D-9EE2-5F33167499F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{317BD4C1-A893-4A6D-9EE2-5F33167499F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{317BD4C1-A893-4A6D-9EE2-5F33167499F7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
