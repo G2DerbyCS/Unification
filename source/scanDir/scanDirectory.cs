@@ -8,7 +8,7 @@ namespace scanDirectory
 {
     public class scanDirectory
     {
-        /*Stores the user prodivded directory to be scanned.*/
+        /*Stores the user provided directory to be scanned.*/
         public string sourceDir { get; set; }
         /*Stores the type of audio file formats.*/
         public string fileFormat { get; set; }
@@ -21,7 +21,7 @@ namespace scanDirectory
             
             try
             {
-                /*Retreives files (fileFormat) from a directory and subdirectories (sourceDir).
+                /*Retreives file format (fileFormat) from a directory and subdirectories (sourceDir).
                 Could use GetFiles, but Enumeratefiles starts enumerating the collection before the whole collection is return.
                 Better performance with EnumerateFiles.
                 */
