@@ -8,17 +8,12 @@ namespace Unification.Models.AudioEngine
     /// <summary>
     /// A singleton class that obtains access to and outputs audio to a sound device.
     /// </summary>
-    internal class NAudioSink : IDisposable
+    internal class NAudioSink : MixingSampleProvider, IDisposable
     {
         /// <summary>
         /// Stores number of audio channels to be output to.
         /// </summary>
         private int _ChannelCount;
-
-        /// <summary>
-        /// Handles ISampleProviders for _OutputDev.
-        /// </summary>
-        private MixingSampleProvider _Mixer;
 
         /// <summary>
         /// Handles audio output to the sound device.
@@ -30,27 +25,17 @@ namespace Unification.Models.AudioEngine
         /// </summary>
         private int _SampleRate;
 
-        private NAudioSink()
+        private NAudioSink(int SampleRate, int ChannelCount) : base(WaveFormat.CreateIeeeFloatWaveFormat(SampleRate, ChannelCount))
         {
-            ChannelCount     = 2;     // Assumed safe default value.
-            SampleRate       = 44100; // Assumed safe default value.
-            _OutputDev       = new WaveOutEvent();
-            _Mixer           = new MixingSampleProvider(WaveFormat.CreateIeeeFloatWaveFormat(SampleRate, ChannelCount));
-            _Mixer.ReadFully = true;
+            _OutputDev        = new WaveOutEvent();
+            ReadFully         = true;
+            this.ChannelCount = ChannelCount;
+            this.SampleRate   = SampleRate;
 
-            _OutputDev.Init(_Mixer);
+            _OutputDev.Init(this);
             _OutputDev.Play();
 
             State = AudioSinkState.Available;
-        }
-
-        /// <summary>
-        /// Adds an ISampleProvider to the AudioEngine MixingSampleProvider for output.
-        /// </summary>
-        /// <param name="SampleProvider">ISampleProvider to be added.</param>
-        public void AddSampleToOutput(ISampleProvider SampleProvider)
-        {
-            _Mixer.AddMixerInput(SampleProvider);
         }
 
         /// <summary>
@@ -77,16 +62,7 @@ namespace Unification.Models.AudioEngine
         /// <summary>
         /// Provides an instance of the AudioEngine class.
         /// </summary>
-        public readonly NAudioSink Instance = new NAudioSink();
-
-        /// <summary>
-        /// Removes an exsiting ISampleProvider from the AudioEngine MixingSampleProvider.
-        /// </summary>
-        /// <param name="SampleProvider">ISampleProvider to be removed.</param>
-        public void RemoveSampleFromOutput(ISampleProvider SampleProvider)
-        {
-            _Mixer.RemoveMixerInput(SampleProvider);
-        }
+        public static readonly NAudioSink Instance = new NAudioSink(44100, 2); // Assumed Safe Defaults
 
         /// <summary>
         /// Indicates output sample rate.
