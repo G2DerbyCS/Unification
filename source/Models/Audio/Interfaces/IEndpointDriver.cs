@@ -11,20 +11,9 @@ namespace Unification.Models.Audio.Interfaces
     internal interface IEndpointDriver
     {
         /// <summary>
-        /// Indicates currently selected Endpoint.
-        /// </summary>
-        Endpoint Endpoint { get; }
-
-        /// <summary>
         /// Gets the output Endpoints available to this IEndpointDriver instance. 
         /// </summary>
         IEnumerable<Endpoint> AvailableEndpoints { get; }
-
-        /// <summary>
-        /// Assings Endpoint for audio output.
-        /// </summary>
-        /// <param name="Endpoint"></param>
-        void SetEndpoint(Endpoint Endpoint);
 
         /// <summary>
         /// Parses buffer content and outputs content on active Endpoint.
@@ -32,6 +21,17 @@ namespace Unification.Models.Audio.Interfaces
         /// <param name="Buffer">Buffer containing audio data.</param>
         /// <returns></returns>
         bool ParseBuffer(byte[] InputBuffer);
+
+        /// <summary>
+        /// Indicates currently selected Endpoint.
+        /// </summary>
+        Endpoint Endpoint { get; }
+
+        /// <summary>
+        /// Assings Endpoint for audio output.
+        /// </summary>
+        /// <param name="Endpoint"></param>
+        void SetEndpoint(Endpoint Endpoint);
 
         /// <summary>
         /// Indicates the availability of this IEndpointDriver instance.

@@ -19,21 +19,21 @@ namespace Unification.Models.Audio
         }
 
         /// <summary>
-        /// Enpoint friendly name.
-        /// </summary>
-        String Title 
-        {
-            private set;
-            get; 
-        }
-
-        /// <summary>
         /// Endpoint device guid.
         /// </summary>
         Guid Guid
         {
             private set;
             get;
+        }
+
+        /// <summary>
+        /// Enpoint friendly name.
+        /// </summary>
+        String Title 
+        {
+            private set;
+            get; 
         }
     }
 }
