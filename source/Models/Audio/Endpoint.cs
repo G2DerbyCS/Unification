@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NAudio.CoreAudioApi;
+using System;
 
 namespace Unification.Models.Audio
 {
@@ -12,7 +13,7 @@ namespace Unification.Models.Audio
         /// </summary>
         /// <param name="Title">Enpoint friendly name.</param>
         /// <param name="Guid">Endpoint device guid.</param>
-        Endpoint(string Title, Guid Guid)
+        public Endpoint(string Title, Guid Guid)
         {
             this.Guid  = Guid;
             this.Title = Title;
@@ -21,7 +22,7 @@ namespace Unification.Models.Audio
         /// <summary>
         /// Endpoint device guid.
         /// </summary>
-        Guid Guid
+        public Guid Guid
         {
             private set;
             get;
@@ -30,7 +31,7 @@ namespace Unification.Models.Audio
         /// <summary>
         /// Enpoint friendly name.
         /// </summary>
-        String Title 
+        public String Title 
         {
             private set;
             get; 

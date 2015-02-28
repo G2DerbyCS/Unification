@@ -13,7 +13,7 @@ namespace Unification.Models.Audio
         /// </summary>
         /// <param name="State">IEndpointDriver state.</param>
         /// <param name="Exception">Raised exception.</param>
-        EndpointDriverStateChangeEventArgs(EndpointDriverState State, Exception Exception = null)
+        public EndpointDriverStateChangeEventArgs(EndpointDriverState State, Exception Exception = null)
         {
             this.Exception = Exception;
             this.State     = State;
@@ -22,7 +22,7 @@ namespace Unification.Models.Audio
         /// <summary>
         /// An exception, will be null if no exceptions were raised.
         /// </summary>
-        Exception Exception
+        public Exception Exception
         {
             private set;
             get;
@@ -31,7 +31,7 @@ namespace Unification.Models.Audio
         /// <summary>
         /// Indicates IEndpointDriver instance state.
         /// </summary>
-        EndpointDriverState State 
+        public EndpointDriverState State 
         {
             private set;
             get; 
