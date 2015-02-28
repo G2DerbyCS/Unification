@@ -67,6 +67,9 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Models\Audio\EndpointDriverStateChangeEventArgs.cs" />
+    <Compile Include="Models\Audio\Enums\EndpointDriverStateEnum.cs" />
+    <Compile Include="Models\Audio\Interfaces\IEndpointDriver.cs" />
     <Compile Include="Views\MainWindowView.xaml.cs">
       <DependentUpon>MainWindowView.xaml</DependentUpon>
     </Compile>
