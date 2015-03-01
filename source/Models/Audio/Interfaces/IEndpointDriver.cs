@@ -11,20 +11,21 @@ namespace Unification.Models.Audio.Interfaces
     internal interface IEndpointDriver : IDisposable
     {
         /// <summary>
-        /// Gets the output Endpoints available to this IEndpointDriver instance. 
-        /// </summary>
-        IEnumerable<Endpoint> AvailableEndpoints { get; }
-
-        /// <summary>
         /// Indicates currently selected Endpoint.
         /// </summary>
         Endpoint Endpoint { get; }
 
         /// <summary>
-        /// Parses buffer content and outputs content on active Endpoint.
+        /// Gets the output Endpoints available to this IEndpointDriver instance. 
         /// </summary>
-        /// <param name="Buffer">Buffer containing audio data.</param>
-        void ParseBuffer(IWaveProvider WaveProvider, int FrameCount);
+        IEnumerable<Endpoint> GetAvailableEndpoints();
+
+        /// <summary>
+        /// Fills Endpoint render buffer with data from the WaveProvider.
+        /// </summary>
+        /// <param name="WaveProvider">WaveProvider to be read.</param>
+        /// <param name="FrameCount">Number of frames to read from WaveProvider.</param>
+        void ReadWaveProvider(IWaveProvider WaveProvider, int FrameCount);
 
         /// <summary>
         /// Assings Endpoint for audio output.
