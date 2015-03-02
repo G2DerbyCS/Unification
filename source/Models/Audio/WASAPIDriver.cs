@@ -1,8 +1,8 @@
 ﻿using NAudio.CoreAudioApi;
-using NAudio.Wave;
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using System.Threading;
 using Unification.Models.Audio.Enums;
 using Unification.Models.Audio.Interfaces;
 
@@ -15,11 +15,11 @@ namespace Unification.Models.Audio
     {
         private AudioClient                   _AudioClient          = null;
         private readonly AudioClientShareMode _AudioClientShareMode = AudioClientShareMode.Shared;
+        private readonly int                  _BufferDuration       = 10000000;
         private int                           _BytesPerFrame        = -1;
         private Endpoint                      _Endpoint             = null;
         private EndpointDriverState           _EndpointDriverState  = EndpointDriverState.Unavailable;
         private MMDevice                      _MMDevice             = null;
-        private Byte[]                        _ReadBuffer           = null;
 
         /// <summary>
         /// Constructor.
@@ -85,22 +85,36 @@ namespace Unification.Models.Audio
         }
 
         /// <summary>
-        /// Utalizes a MMDeviceEnumerator to fetch all available render MMDevices, converting them to Endpoint objects.
+        /// Retrieves the current capacity of the audio framebuffer associated with the endpoint.
         /// </summary>
-        public IEnumerable<Endpoint> GetAvailableEndpoints()
+        public int AvailableFramebufferCapacity
         {
-            MMDeviceEnumerator MMDevEnumerator = new MMDeviceEnumerator();
-            MMDeviceCollection MMDevCollection = MMDevEnumerator.EnumerateAudioEndPoints(DataFlow.Render, DeviceState.Active);
-            List<Endpoint>     EndpointList    = new List<Endpoint>();
+            get
+            {
+                if (_AudioClient == null)
+                    return 0;
 
-            foreach (MMDevice MMDev in MMDevCollection)
-                EndpointList.Add(new Endpoint(MMDev.FriendlyName, MMDev.GetGuid()));
+                return MaxFramebufferCapacity - _AudioClient.CurrentPadding;
+            }
+        }
 
-            return EndpointList;
+        /// <summary>
+        /// Retrieves the number of bytes accepted as an audio frame by the endpoint.
+        /// </summary>
+        public int BytesPerFrame
+        {
+            get
+            {
+                if (_BytesPerFrame.Equals(-1))
+                    _BytesPerFrame = ((_AudioClient.MixFormat.Channels * _AudioClient.MixFormat.BitsPerSample) / 8);
+
+                return _BytesPerFrame;
+            }
         }
 
         public void Dispose()
         {
+            _AudioClient.Stop();
             _AudioClient.Dispose();
             _AudioClient = null;
         }
@@ -131,6 +145,35 @@ namespace Unification.Models.Audio
         }
 
         /// <summary>
+        /// Utalizes a MMDeviceEnumerator to fetch all available render MMDevices, converting them to Endpoint objects.
+        /// </summary>
+        public IEnumerable<Endpoint> GetAvailableEndpoints()
+        {
+            MMDeviceEnumerator MMDevEnumerator = new MMDeviceEnumerator();
+            MMDeviceCollection MMDevCollection = MMDevEnumerator.EnumerateAudioEndPoints(DataFlow.Render, DeviceState.Active);
+            List<Endpoint>     EndpointList    = new List<Endpoint>();
+
+            foreach (MMDevice MMDev in MMDevCollection)
+                EndpointList.Add(new Endpoint(MMDev.FriendlyName, MMDev.GetGuid()));
+
+            return EndpointList;
+        }
+
+        /// <summary>
+        /// Retrieves the maximum capacity of the audio framebuffer associated with the endpoint.
+        /// </summary>
+        public int MaxFramebufferCapacity
+        {
+            get
+            {
+                if (_AudioClient == null)
+                    return -1;
+
+                return _AudioClient.BufferSize;
+            }
+        }
+
+        /// <summary>
         /// Assigns and initializes _AudioClient. If successful, changes State property to Available. 
         /// </summary>
         private void OpenAudioClient()
@@ -138,30 +181,34 @@ namespace Unification.Models.Audio
             _AudioClient = _MMDevice.AudioClient;
 
             _AudioClient.Initialize(_AudioClientShareMode, AudioClientStreamFlags.None,
-                                    (int)(_AudioClient.StreamLatency / 10000),
-                                    0, _AudioClient.MixFormat, Guid.Empty);
+                                    _BufferDuration, 0, _MMDevice.AudioClient.MixFormat, 
+                                    Guid.Empty);
 
-            _BytesPerFrame = ((_AudioClient.MixFormat.Channels * _AudioClient.MixFormat.BitsPerSample) / 8);
-
+            _AudioClient.Start();
             State = EndpointDriverState.Available;
         }
 
         /// <summary>
-        /// Passes the AudioRenderClient buffer to an IWaveProvider to be filled and then rendered via the MMDevice.
+        /// Places byte array into device memory for rendering.
         /// </summary>
-        /// <param name="WaveProvider"></param>
-        /// <param name="FrameCount"></param>
-        public void ReadWaveProvider(IWaveProvider WaveProvider, int FrameCount)
+        /// <param name="AudioFramebuffer">Byte array containing audio data.</param>
+        /// <param name="BytesToRead">Number of bytes written to AudioFramebuffer byte array.</param>
+        /// <param name="FrameCount">Number of frames contained in AudioFramebuffer byte array.</param>
+        public bool RenderFramebuffer(byte[] AudioFramebuffer, int BytesToRead, int FrameCount)
         {
-            if (_AudioClient == null) return;
+            if (_AudioClient != null && !BytesToRead.Equals(0))
+            {
+                IntPtr DeviceFramebuffer = _AudioClient.AudioRenderClient.GetBuffer(FrameCount);
 
-            IntPtr Buffer     = _AudioClient.AudioRenderClient.GetBuffer(FrameCount);
-            int    ReadLength = FrameCount * _BytesPerFrame;
-            int    BytesRead  = WaveProvider.Read(_ReadBuffer, 0, ReadLength);
+                Marshal.Copy(AudioFramebuffer, 0, DeviceFramebuffer, BytesToRead);
 
-            Marshal.Copy(_ReadBuffer, 0, Buffer, BytesRead);
+                _AudioClient.AudioRenderClient.ReleaseBuffer(FrameCount, AudioClientBufferFlags.None);
 
-            _AudioClient.AudioRenderClient.ReleaseBuffer(10, AudioClientBufferFlags.None);
+                Thread.Sleep(25);
+                return true;
+            }
+
+            return false;
         }
 
         /// <summary>

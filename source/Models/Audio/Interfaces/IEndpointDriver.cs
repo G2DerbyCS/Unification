@@ -11,6 +11,16 @@ namespace Unification.Models.Audio.Interfaces
     internal interface IEndpointDriver : IDisposable
     {
         /// <summary>
+        /// Retrieves the current available capacity of the audio framebuffer associated with the endpoint.
+        /// </summary>
+        int AvailableFramebufferCapacity { get; }
+
+        /// <summary>
+        /// Retrieves the number of bytes accepted as an audio frame by the endpoint.
+        /// </summary>
+        int BytesPerFrame { get; }
+
+        /// <summary>
         /// Indicates currently selected Endpoint.
         /// </summary>
         Endpoint Endpoint { get; }
@@ -21,11 +31,17 @@ namespace Unification.Models.Audio.Interfaces
         IEnumerable<Endpoint> GetAvailableEndpoints();
 
         /// <summary>
-        /// Fills Endpoint render buffer with data from the WaveProvider.
+        /// Retrieves the maximum available capacity of the audio framebuffer associated with the endpoint.
         /// </summary>
-        /// <param name="WaveProvider">WaveProvider to be read.</param>
-        /// <param name="FrameCount">Number of frames to read from WaveProvider.</param>
-        void ReadWaveProvider(IWaveProvider WaveProvider, int FrameCount);
+        int MaxFramebufferCapacity { get; }
+
+        /// <summary>
+        /// Places byte array into device memory for rendering.
+        /// </summary>
+        /// <param name="AudioFramebuffer">Byte array containing audio data.</param>
+        /// <param name="BytesToRead">Number of bytes written to AudioFramebuffer byte array.</param>
+        /// <param name="FrameCount">Number of frames contained in AudioFramebuffer byte array.</param>
+        bool RenderFramebuffer(byte[] AudioFramebuffer, int BytesToRead, int FrameCount);
 
         /// <summary>
         /// Assings Endpoint for audio output.
