@@ -77,6 +77,10 @@
     <Compile Include="Models\Audio\WASAPIDriver.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Models\ValueChangedEventArgs.cs" />
+    <Compile Include="Views\Controls\ProgressSlider.xaml.cs">
+      <DependentUpon>ProgressSlider.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MainWindowView.xaml.cs">
       <DependentUpon>MainWindowView.xaml</DependentUpon>
     </Compile>
@@ -548,7 +552,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\Controls\ProgressSlider.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\MainWindowView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Resources\ControlStylesResourceDictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
