@@ -6,10 +6,11 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using Unification.Models;
+using Unification.Models.Interfaces;
 
 namespace Unification.Views.Controls
 {
-    public partial class ProgressSlider : UserControl, INotifyPropertyChanged
+    public partial class ProgressSlider : UserControl, INotifyPropertyChanged, IProgressIndicator
     {
         private float      _Progress;
         private Brush      _ProgressBarColorBrush;
@@ -89,7 +90,7 @@ namespace Unification.Views.Controls
             }
         }
 
-        public EventHandler<ValueChangingEventArgs<float>> OnProgressUpdated;
+        public event EventHandler<StateChangeEventArgs<float>> ProgressUpdatedEvent;
 
         protected override void OnMouseMove(MouseEventArgs e)
         {
@@ -121,8 +122,8 @@ namespace Unification.Views.Controls
                 if (value > 1 || value < 0)
                     throw new ArgumentException("Progress must be a float value between 0.0f and 1.0f");
 
-                if (OnProgressUpdated != null)
-                    OnProgressUpdated(this, new ValueChangingEventArgs<float>(_Progress, value));
+                if (ProgressUpdatedEvent != null)
+                    ProgressUpdatedEvent(this, new StateChangeEventArgs<float>(value, _Progress));
 
                 AssignPropertyValue(ref _Progress, "Progress", value);
 

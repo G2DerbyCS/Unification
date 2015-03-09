@@ -56,6 +56,6 @@ namespace Unification.Models.Audio.Interfaces
         /// <summary>
         /// Event to be raised when the State property changes.
         /// </summary>
-        event EventHandler<EndpointDriverStateChangeEventArgs> StateChangedEvent;
+        event EventHandler<StateChangeEventArgs<EndpointDriverState>> StateChangedEvent;
     }
 }

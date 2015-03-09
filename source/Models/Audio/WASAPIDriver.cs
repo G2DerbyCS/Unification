@@ -40,7 +40,7 @@ namespace Unification.Models.Audio
                 State = EndpointDriverState.Unsupported;
 
                 if (StateChangedEvent != null)
-                    StateChangedEvent(this, new EndpointDriverStateChangeEventArgs(State, NSE));
+                    StateChangedEvent(this, new StateChangeEventArgs<EndpointDriverState>(State, EndpointDriverState.Unavailable, NSE));
 
                 throw NSE;
             }
@@ -115,6 +115,7 @@ namespace Unification.Models.Audio
         public void Dispose()
         {
             _AudioClient.Stop();
+            State = EndpointDriverState.Unavailable;
             _AudioClient.Dispose();
             _AudioClient = null;
         }
@@ -231,9 +232,7 @@ namespace Unification.Models.Audio
             private set
             {
                 if (StateChangedEvent != null && value != _EndpointDriverState)
-                {
-                    StateChangedEvent(this, new EndpointDriverStateChangeEventArgs(value, null));
-                }
+                    StateChangedEvent(this, new StateChangeEventArgs<EndpointDriverState>(_EndpointDriverState, value));
 
                 _EndpointDriverState = value;
             }
@@ -246,6 +245,6 @@ namespace Unification.Models.Audio
         /// <summary>
         /// Event to be raised when the State property changes.
         /// </summary>
-        public event EventHandler<EndpointDriverStateChangeEventArgs> StateChangedEvent;
+        public event EventHandler<StateChangeEventArgs<EndpointDriverState>> StateChangedEvent;
     }
 }

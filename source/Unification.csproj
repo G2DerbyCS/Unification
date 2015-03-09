@@ -34,6 +34,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="IUnification">
+      <HintPath>..\..\IUnification\source\bin\Debug\IUnification.dll</HintPath>
+    </Reference>
     <Reference Include="ModernWindowFrameLibrary, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Libraries\ModernWindowFrameLibrary.dll</HintPath>
@@ -68,16 +71,22 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Models\Audio\Endpoint.cs" />
-    <Compile Include="Models\Audio\EndpointDriverStateChangeEventArgs.cs" />
     <Compile Include="Models\Audio\Enums\EndpointDriverStateEnum.cs" />
     <Compile Include="Models\Audio\EndpointDriverExtensions.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Models\Audio\Enums\PlaybackStateEnum.cs" />
     <Compile Include="Models\Audio\Interfaces\IEndpointDriver.cs" />
+    <Compile Include="Models\Audio\Interfaces\IPlaybackController.cs" />
     <Compile Include="Models\Audio\WASAPIDriver.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Models\ValueChangedEventArgs.cs" />
+    <Compile Include="Models\Enums\PlaylistLoopModeEnum.cs" />
+    <Compile Include="Models\Enums\PlaylistLockEnum.cs" />
+    <Compile Include="Models\Enums\PlaylistSequenceModeEnum.cs" />
+    <Compile Include="Models\Interfaces\IPlaylist.cs" />
+    <Compile Include="Models\Interfaces\IProgressIndicator.cs" />
+    <Compile Include="Models\StateChangeEventArgs.cs" />
     <Compile Include="Views\Controls\ProgressSlider.xaml.cs">
       <DependentUpon>ProgressSlider.xaml</DependentUpon>
     </Compile>
@@ -113,8 +122,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Models\Enums\" />
-    <Folder Include="Models\Interfaces\" />
     <Folder Include="View Models\Enums\" />
   </ItemGroup>
   <ItemGroup>
