@@ -80,7 +80,7 @@ namespace Unification.Models.Audio
 
             if (_MMDevice == null)
             {
-                throw new ArgumentException("Endpoint To MMDevice Mapping Exception");
+                throw new NullReferenceException("Endpoint To MMDevice Mapping Exception");
             }
         }
 
