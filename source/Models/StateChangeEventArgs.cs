@@ -28,7 +28,7 @@ namespace Unification.Models
         /// </summary>
         /// <param name="PreviousState">Object's previous state.</param>
         /// <param name="CurrentState">Object's current state.</param>
-        /// /// <param name="Exception">Raised exception.</param>
+        /// <param name="Exception">Raised exception.</param>
         public StateChangeEventArgs(T CurrentState, T PreviousState = default(T), Exception Exception = null)
         {
             this.CurrentState  = CurrentState;
