@@ -21,38 +21,39 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <Grid Grid.Row="0" Margin="1" SnapsToDevicePixels="True">
+        <Grid Grid.Row="0" Focusable="False" Margin="1" SnapsToDevicePixels="True">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
-            <StackPanel x:Name="PlaybackButtonControlsPanel" Grid.Column="0" Orientation="Horizontal" Margin="2, 1, 2, 0" HorizontalAlignment="Center" VerticalAlignment="Top">
-                <Button x:Name="Previous" Margin="0" Height="40" Width="40" VerticalAlignment="Center">
-                    <Frame Source="pack://application:,,,/Views/Resources/MainWindowView/Icons/Previous.xaml"/>
+            <StackPanel x:Name="PlaybackButtonControlsPanel" Grid.Column="0" HorizontalAlignment="Center" Margin="2, 1, 2, 0" 
+                        Orientation="Horizontal" VerticalAlignment="Top" Focusable="False">
+                <Button x:Name="PreviousButtonUIElement" Height="40" IsTabStop="True" Margin="0" VerticalAlignment="Center" Width="40">
+                    <Frame Source="pack://application:,,,/Views/Resources/MainWindowView/Icons/Previous.xaml" Focusable="False" IsTabStop="False"/>
                 </Button>
 
-                <Button x:Name="Play" Margin="0" Height="40" Width="40" VerticalAlignment="Center">
-                    <Frame Source="pack://application:,,,/Views/Resources/MainWindowView/Icons/Play.xaml"/>
+                <Button x:Name="PlayButtonUIElement" Height="40" IsTabStop="True" Margin="0" VerticalAlignment="Center" Width="40">
+                    <Frame Source="pack://application:,,,/Views/Resources/MainWindowView/Icons/Play.xaml" Focusable="False" IsTabStop="False"/>
                 </Button>
 
-                <Button x:Name="Stop" Margin="0" Height="40" Width="40" VerticalAlignment="Center">
-                    <Frame Source="pack://application:,,,/Views/Resources/MainWindowView/Icons/Stop.xaml"/>
+                <Button x:Name="StopButtonUIElement" Height="40" IsTabStop="True" Margin="0" VerticalAlignment="Center" Width="40">
+                    <Frame Source="pack://application:,,,/Views/Resources/MainWindowView/Icons/Stop.xaml" Focusable="False" IsTabStop="False"/>
                 </Button>
 
-                <Button x:Name="Next" Margin="0" Height="40" Width="40" VerticalAlignment="Center">
-                    <Frame Source="pack://application:,,,/Views/Resources/MainWindowView/Icons/Next.xaml"/>
+                <Button x:Name="NextButtonUIElement" Height="40" IsTabStop="True" Margin="0" VerticalAlignment="Center" Width="40">
+                    <Frame Source="pack://application:,,,/Views/Resources/MainWindowView/Icons/Next.xaml" Focusable="False" IsTabStop="False"/>
                 </Button>
             </StackPanel>
             
-            <Grid Grid.Column="1" Margin="1">
+            <Grid Grid.Column="1" Focusable="False" Margin="1">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
-                <uc:ProgressSlider x:Name="ProgressSlider" Grid.Row="0" Margin="1, 0" Opacity="0.8"/>
+                <uc:ProgressSlider x:Name="ProgressSliderUIElement" Grid.Row="0" Margin="1, 0" Opacity="0.8" Focusable="True" IsTabStop="True"/>
 
                 <Grid Grid.Row="1">
                     <Grid.ColumnDefinitions>
@@ -60,34 +61,45 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
-                    <StackPanel x:Name="MediaViewsButtonsPanel" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left">
-                        <Button x:Name="ListView" Height="20" Margin="3,0,0,0" Padding="-2.5" Width="20"  VerticalAlignment="Top">
-                            <Frame Source="pack://application:,,,/Views/Resources/MainWindowView/Icons/List_View.xaml"/>
+                    <StackPanel x:Name="MediaViewsButtonsPanel" Focusable="False" Grid.Column="0" Orientation="Horizontal" 
+                                HorizontalAlignment="Left">
+                        <Button x:Name="ListViewButtonUIElement" Focusable="True" Height="20" IsTabStop="True" Margin="3,0,0,0" Padding="-2.5" 
+                                Width="20"  VerticalAlignment="Top">
+                            <Frame Source="pack://application:,,,/Views/Resources/MainWindowView/Icons/List_View.xaml" Focusable="False" 
+                                   IsTabStop="False"/>
                         </Button>
 
-                        <Button x:Name="AlbumView" Height="20" Margin="10,0,7,0" Padding="-5" Width="20" VerticalAlignment="Top">
-                            <Frame Source="pack://application:,,,/Views/Resources/MainWindowView/Icons/Album_View.xaml"/>
+                        <Button x:Name="AlbumViewButtonUIElement" Focusable="True" Height="20" IsTabStop="True" Margin="10,0,7,0" Padding="-5" 
+                                Width="20" VerticalAlignment="Top">
+                            <Frame Source="pack://application:,,,/Views/Resources/MainWindowView/Icons/Album_View.xaml" Focusable="False" 
+                                   IsTabStop="False"/>
                         </Button>
 
-                        <Button x:Name="ArtisView" Height="20" Padding="0" Width="20" VerticalAlignment="Top">
-                            <Frame Source="pack://application:,,,/Views/Resources/MainWindowView/Icons/Artist_View.xaml"/>
+                        <Button x:Name="ArtisViewButtonUIElement" Focusable="True" Height="20" IsTabStop="True" Padding="0" Width="20" 
+                                VerticalAlignment="Top">
+                            <Frame Source="pack://application:,,,/Views/Resources/MainWindowView/Icons/Artist_View.xaml" Focusable="False" 
+                                   IsTabStop="False"/>
                         </Button>
                     </StackPanel>
 
-                    <uc:ProgressSlider x:Name="VolumeSlider" Grid.Column="1" Margin="1" Width="200"/>
+                    <uc:ProgressSlider x:Name="VolumeSliderUIElement" Grid.Column="1" Margin="1" Width="200" Focusable="True" IsTabStop="True"/>
                 </Grid>
             </Grid>
 
-            <StackPanel x:Name="SettingsButtonsPanel" Grid.Column="2" Margin="0,1" HorizontalAlignment="Center" 
+            <StackPanel x:Name="SettingsButtonsPanel" Focusable="False" Grid.Column="2" Margin="0,1" HorizontalAlignment="Center" 
                         VerticalAlignment="Top">
-                <Button x:Name="Settings" Margin="1" Height="30" HorizontalContentAlignment="Center" Width="30" 
+                <Button x:Name="SettingsButtonUIElement" Focusable="True" Margin="1" IsTabStop="True" Height="30" 
+                        HorizontalContentAlignment="Center" Width="30" 
                         VerticalContentAlignment="Center">
-                    <Frame Source="pack://application:,,,/Views/Resources/MainWindowView/Icons/Settings.xaml"/>
+                    <Frame Source="pack://application:,,,/Views/Resources/MainWindowView/Icons/Settings.xaml" Focusable="True" 
+                           IsTabStop="True"/>
                 </Button>
 
-                <Button x:Name="BackgroundToggle" Margin="1" Height="30" HorizontalContentAlignment="Center" Width="30"
+                <Button x:Name="BackgroundToggleButtonUIElement" Focusable="True" Margin="1" IsTabStop="True" Height="30" 
+                        HorizontalContentAlignment="Center" Width="30"
                         VerticalContentAlignment="Center">
-                    <Frame Source="pack://application:,,,/Views/Resources/MainWindowView/Icons/Compress.xaml"/>
+                    <Frame Source="pack://application:,,,/Views/Resources/MainWindowView/Icons/Compress.xaml" Focusable="True" 
+                           IsTabStop="True"/>
                 </Button>
             </StackPanel>
         </Grid>
@@ -99,9 +111,9 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
-            <Grid x:Name="DatasourceGrid" Grid.Column="0"/>
-            <Grid x:Name="MediaViewGrid"  Grid.Column="1"/>
-            <Grid x:Name="PlaylistGrid"   Grid.Column="2"/>
+            <Grid x:Name="DatasourceGrid" Focusable="False" Grid.Column="0"/>
+            <Grid x:Name="MediaViewGrid"  Focusable="False" Grid.Column="1"/>
+            <Grid x:Name="PlaylistGrid"   Focusable="False" Grid.Column="2"/>
         </Grid>
 
         <Grid x:Name="VisualizerGrid" Grid.Row="2" d:IsHidden="True"/>
