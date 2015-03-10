@@ -327,8 +327,8 @@
                                     Grid.Column="0"
                                     VerticalAlignment="Top"
                                     HorizontalAlignment="Stretch"
-                                    Background="{TemplateBinding Background}"
-                                    BorderBrush="{TemplateBinding Background}">
+                                    Background="#01FFFFFF"
+                                    BorderThickness="0">
                                 
                                 <Grid x:Name="HeaderTitleGrid"
                                       VerticalAlignment="Top" 

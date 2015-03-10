@@ -4,9 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" d:DesignHeight="25" d:DesignWidth="300"
-             
-             xmlns:diag="clr-namespace:System.Diagnostics;assembly=WindowsBase"
-             DataContext="{Binding RelativeSource={RelativeSource Self},  diag:PresentationTraceSources.TraceLevel=High}">
+             DataContext="{Binding RelativeSource={RelativeSource Self}}">
     <Grid Margin="{Binding Padding}" Background="#00FFFFFF">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>

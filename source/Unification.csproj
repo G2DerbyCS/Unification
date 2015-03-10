@@ -87,9 +87,11 @@
     <Compile Include="Models\Interfaces\IPlaylist.cs" />
     <Compile Include="Models\Interfaces\IProgressIndicator.cs" />
     <Compile Include="Models\StateChangeEventArgs.cs" />
+    <Compile Include="View Models\MainWindowViewViewModel.cs" />
     <Compile Include="Views\Controls\ProgressSlider.xaml.cs">
       <DependentUpon>ProgressSlider.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Enums\CompactModeStateEnum.cs" />
     <Compile Include="Views\MainWindowView.xaml.cs">
       <DependentUpon>MainWindowView.xaml</DependentUpon>
     </Compile>
