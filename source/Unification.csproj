@@ -81,11 +81,14 @@
     <Compile Include="Models\Audio\WASAPIDriver.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Models\Enums\LoadingStateEnum.cs" />
     <Compile Include="Models\Enums\PlaylistLoopModeEnum.cs" />
     <Compile Include="Models\Enums\PlaylistLockEnum.cs" />
     <Compile Include="Models\Enums\PlaylistSequenceModeEnum.cs" />
     <Compile Include="Models\Interfaces\IPlaylist.cs" />
     <Compile Include="Models\Interfaces\IProgressIndicator.cs" />
+    <Compile Include="Models\LoadingCompletedEventArgs.cs" />
+    <Compile Include="Models\Plugins\PluginLoader.cs" />
     <Compile Include="Models\StateChangeEventArgs.cs" />
     <Compile Include="View Models\MainWindowViewViewModel.cs" />
     <Compile Include="Views\Controls\ProgressSlider.xaml.cs">

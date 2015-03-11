@@ -11,17 +11,29 @@ namespace Unification.Models
         /// <summary>
         /// Current object state.
         /// </summary>
-        public readonly T CurrentState;
+        public T CurrentState
+        {
+            private set;
+            get;
+        }
 
         /// <summary>
         /// Previous object state.
         /// </summary>
-        public readonly T PreviousState;
+        public T PreviousState
+        {
+            private set;
+            get;
+        }
 
         /// <summary>
         /// An exception, will be null if no exceptions were raised.
         /// </summary>
-        public readonly Exception Exception;
+        public Exception Exception
+        {
+            private set;
+            get;
+        }
 
         /// <summary>
         /// Constructor.
