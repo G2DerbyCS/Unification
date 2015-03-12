@@ -90,7 +90,6 @@
     <Compile Include="Models\LoadingCompletedEventArgs.cs" />
     <Compile Include="Models\Plugins\PluginLoader.cs" />
     <Compile Include="Models\StateChangeEventArgs.cs" />
-    <Compile Include="View Models\MainWindowViewViewModel.cs" />
     <Compile Include="Views\Controls\ProgressSlider.xaml.cs">
       <DependentUpon>ProgressSlider.xaml</DependentUpon>
     </Compile>
@@ -127,7 +126,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="View Models\Enums\" />
+    <Folder Include="View Models\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Libraries\ModernWindowFrameLibrary.dll" />
