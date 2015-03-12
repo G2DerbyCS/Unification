@@ -8,18 +8,28 @@ namespace Unification
     /// </summary>
     public partial class App : Application
     {
+        private static System.Threading.Thread T;
+
         private void Application_Startup(object sender, StartupEventArgs e)
         {
             MainWindowView _MainWindowView = new MainWindowView();
             _MainWindowView.Show();
+
+            _MainWindowView.Closing += (sv, ve) =>
+                {
+                    T.Abort();
+                };
+
+            WASAPIEndpointDriverPlayThreadInit();
+            T.Start();
         }
 
-        private void WASAPIEndpointDriverTest()
+        private void WASAPIEndpointDriverPlayThreadInit()
         {
-            System.Threading.Thread T = new System.Threading.Thread(() =>
+            T = new System.Threading.Thread(() =>
             {
                 using (Models.Audio.Interfaces.IEndpointDriver WD = new Models.Audio.WASAPIDriver())
-                using (NAudio.Wave.AudioFileReader WP = new NAudio.Wave.AudioFileReader(@"")) // Insert Path To Audio FIle
+                using (NAudio.Wave.AudioFileReader WP = new NAudio.Wave.AudioFileReader(@"../../TestFiles/Feint - Snake Eyes [Lyrics].mp3")) // Insert Path To Audio FIle
                 {
                     bool play = true;
                     int BytesRead = 0;
@@ -41,8 +51,6 @@ namespace Unification
                     }
                 }
             });
-
-            T.Start();
         }
     }
 }
