@@ -20,11 +20,11 @@ namespace Unification
                     T.Abort();
                 };
 
-            WASAPIEndpointDriverPlayThreadInit();
+            WASAPIEndpointDriverPlayThreadInit(_MainWindowView);
             T.Start();
         }
 
-        private void WASAPIEndpointDriverPlayThreadInit()
+        private void WASAPIEndpointDriverPlayThreadInit(MainWindowView View)
         {
             T = new System.Threading.Thread(() =>
             {
@@ -41,6 +41,11 @@ namespace Unification
                         {
                             BytesRead = WP.Read(ReadBuffer, 0, (int)(WD.AvailableFramebufferCapacity * WD.BytesPerFrame));
                             play = WD.RenderFramebuffer(ReadBuffer, BytesRead, (BytesRead / WD.BytesPerFrame));
+
+                            View.Dispatcher.BeginInvoke((System.Action)(() =>
+                            {
+                                View.ProgressSliderUIElement.Progress = (WP.CurrentTime.Ticks / (float)WP.TotalTime.Ticks);
+                            }));
                         }
 
                         System.Diagnostics.Debug.WriteLine("[TEST END]");
