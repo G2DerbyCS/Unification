@@ -10,8 +10,13 @@ using Unification.Models.Interfaces;
 
 namespace Unification.Views.Controls
 {
+    /// <summary>
+    /// A slider style user control for visually representing progress or level.
+    /// </summary>
     public partial class ProgressSlider : UserControl, INotifyPropertyChanged, IProgressIndicator
     {
+        #region Private_Variables
+
         private float      _Progress;
         private Brush      _ProgressBarColorBrush;
         private Thickness  _SliderThumbMargin;
@@ -27,12 +32,20 @@ namespace Unification.Views.Controls
         private Thickness  _TrackPadding;
         private double     _TrackProgressBarWidth;
 
+        #endregion
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
         public ProgressSlider()
         {
             InitializeComponent();
             AssignPropertyDefaults();
         }
 
+        /// <summary>
+        /// Assigns properties default values.
+        /// </summary>
         private void AssignPropertyDefaults()
         {
             Progress              = 0.0f;
@@ -49,6 +62,13 @@ namespace Unification.Views.Controls
             TrackPadding          = new Thickness(2);
         }
 
+        /// <summary>
+        /// Assigns a value to a property and raises the PropertyChanged event if not null.
+        /// </summary>
+        /// <typeparam name="T">Type Specifier.</typeparam>
+        /// <param name="Property">Reference to property to assign Value to.</param>
+        /// <param name="PropertyName">Property name/title for PropertyChanged event call.</param>
+        /// <param name="Value">Value to be assigned to referenced property.</param>
         private void AssignPropertyValue<T>(ref T Property, String PropertyName, T Value)
         {
             Property = Value;
@@ -57,6 +77,10 @@ namespace Unification.Views.Controls
                 PropertyChanged(this, new PropertyChangedEventArgs(PropertyName));
         }
 
+        /// <summary>
+        /// Overriden to set slider thumb visibility to Visible.
+        /// </summary>
+        /// <param name="e"></param>
         protected override void OnMouseEnter(MouseEventArgs e)
         {
             base.OnMouseEnter(e);
@@ -64,6 +88,10 @@ namespace Unification.Views.Controls
             SliderThumbVisibility = Visibility.Visible;
         }
 
+        /// <summary>
+        /// Overriden to set slider thumb visibility to Hidden.
+        /// </summary>
+        /// <param name="e"></param>
         protected override void OnMouseLeave(MouseEventArgs e)
         {
             base.OnMouseLeave(e);
@@ -71,6 +99,10 @@ namespace Unification.Views.Controls
             SliderThumbVisibility = Visibility.Hidden;
         }
 
+        /// <summary>
+        /// Overriden to assign mouse capture to SliderThumbUIElement.
+        /// </summary>
+        /// <param name="e"></param>
         protected override void OnPreviewMouseLeftButtonDown(MouseButtonEventArgs e)
         {
             base.OnPreviewMouseLeftButtonDown(e);
@@ -79,6 +111,10 @@ namespace Unification.Views.Controls
             e.Handled = true;
         }
 
+        /// <summary>
+        /// Overriden to release mouse capture from SliderThumbUIElement if captured.
+        /// </summary>
+        /// <param name="e"></param>
         protected override void OnPreviewMouseLeftButtonUp(MouseButtonEventArgs e)
         {
             base.OnPreviewMouseLeftButtonUp(e);
@@ -90,8 +126,15 @@ namespace Unification.Views.Controls
             }
         }
 
+        /// <summary>
+        /// Event to be raised when Progress property value changes.
+        /// </summary>
         public event EventHandler<StateChangeEventArgs<float>> ProgressUpdatedEvent;
 
+        /// <summary>
+        /// Overriden to update Progress property value if SliderThumbUIElement has mouse capture.
+        /// </summary>
+        /// <param name="e"></param>
         protected override void OnMouseMove(MouseEventArgs e)
         {
             base.OnMouseMove(e);
@@ -104,6 +147,10 @@ namespace Unification.Views.Controls
             }
         }
 
+        /// <summary>
+        /// Overriden to update SliderThumbUIElement and TrackProgressBar UIElement position when ProgressSlider is rendered.
+        /// </summary>
+        /// <param name="drawingContext"></param>
         protected override void OnRender(DrawingContext drawingContext)
         {
             if (Progress > 0)
@@ -115,6 +162,9 @@ namespace Unification.Views.Controls
             base.OnRender(drawingContext);
         }
 
+        /// <summary>
+        /// Sets/Gets Progress property value and updates SliderThumbUIElement and TrackProgressBar UIElement position.
+        /// </summary>
         public float Progress
         {
             set
@@ -137,6 +187,9 @@ namespace Unification.Views.Controls
             }
         }
 
+        /// <summary>
+        /// Sets/Gets the brush used by TrackProgressBar UIElement.
+        /// </summary>
         public Brush ProgressBarColorBrush
         {
             set
@@ -149,6 +202,9 @@ namespace Unification.Views.Controls
             }
         }
 
+        /// <summary>
+        /// Event to be raised when a public ProgressSlider property value changes.
+        /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
 
         public Thickness SliderThumbMargin
@@ -177,6 +233,9 @@ namespace Unification.Views.Controls
             }
         }
 
+        /// <summary>
+        /// Sets/Gets the visibility of the top and bottom TickBars.
+        /// </summary>
         public Visibility TickBarVisibility
         {
             set
@@ -190,6 +249,9 @@ namespace Unification.Views.Controls
             }
         }
 
+        /// <summary>
+        /// Sets/Gets the brush used by the top and bottom TickBars.
+        /// </summary>
         public Brush TicksColorBrush
         {
             set
@@ -203,6 +265,9 @@ namespace Unification.Views.Controls
             }
         }
 
+        /// <summary>
+        /// Represents the frequecy value of the top and bottom TickBars.
+        /// </summary>
         public int TicksFrequency
         {
             set
@@ -216,6 +281,9 @@ namespace Unification.Views.Controls
             }
         }
 
+        /// <summary>
+        /// Represents the length value of the top and bottom TickBars' ticks.
+        /// </summary>
         public int TickBarLength
         {
             set
@@ -229,6 +297,9 @@ namespace Unification.Views.Controls
             }
         }
 
+        /// <summary>
+        /// Represents the corner radius of ProgressSlider track and progress bar.
+        /// </summary>
         public double TrackCornerRadius
         {
             set
@@ -242,6 +313,9 @@ namespace Unification.Views.Controls
             }
         }
 
+        /// <summary>
+        /// Represents the background brush used by the ProgressSlider track.
+        /// </summary>
         public Brush TrackBackgroudBrush
         {
             set
@@ -255,6 +329,9 @@ namespace Unification.Views.Controls
             }
         }
 
+        /// <summary>
+        /// Represents the border brush used by the ProgressSlider track.
+        /// </summary>
         public Brush TrackBorderBrush
         {
             set
@@ -268,6 +345,9 @@ namespace Unification.Views.Controls
             }
         }
 
+        /// <summary>
+        /// Represents the thickness of the ProgressSlider track border.
+        /// </summary>
         public Thickness TrackBorderThickness
         {
             set
@@ -281,6 +361,9 @@ namespace Unification.Views.Controls
             }
         }
 
+        /// <summary>
+        /// Represents the padding between the ProgressSlider track and the top and bottom TickBars.
+        /// </summary>
         public Thickness TrackPadding
         {
             set
@@ -306,6 +389,10 @@ namespace Unification.Views.Controls
             }
         }
 
+        /// <summary>
+        /// Updates the Progress property value based on the input mouse position, relative to the ProgressSlider track.
+        /// </summary>
+        /// <param name="MousePosition">Mouse axis value.</param>
         private void UpdateProgressFromMouseXPos(double MousePosition)
         {
             double RawProgress = (MousePosition / TrackUIElement.ActualWidth);
@@ -324,11 +411,20 @@ namespace Unification.Views.Controls
             }
         }
 
+        /// <summary>
+        /// Updates the width of the TrackProgressBar based on the TrackUIElement width and the Progress property value.
+        /// </summary>
         public void UpdateProgressBar()
         {
             TrackProgressBarWidth = (TrackUIElement.ActualWidth * Progress);
         }
 
+        /// <summary>
+        /// Updates the position of the SliderThumbUIElement based TrackProgressBarWidth.
+        /// </summary>
+        /// <remarks>
+        /// Compensates for visual inconsistencies caused by boundaries and the width of the SliderThumbUIElement.
+        /// </remarks>
         public void UpdateSliderThumb()
         {
             double offset = (TrackProgressBarWidth - (SliderThumbUIElement.ActualWidth / 2));
