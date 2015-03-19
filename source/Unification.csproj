@@ -70,6 +70,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Models\Audio\AudioPlaybackController.cs" />
     <Compile Include="Models\Audio\Endpoint.cs" />
     <Compile Include="Models\Audio\Enums\EndpointDriverStateEnum.cs" />
     <Compile Include="Models\Audio\EndpointDriverExtensions.cs">
