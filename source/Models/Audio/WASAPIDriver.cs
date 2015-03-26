@@ -11,12 +11,10 @@ namespace Unification.Models.Audio
     /// <summary>
     /// An IEndpoint driver implimentation based on NAudio's Wasapi WasapiOut class.
     /// </summary>
-    internal class WASAPIDriver : IEndpointDriver
+    internal sealed class WASAPIDriver : IAudioEndpointDriver
     {
         private AudioClient                   _AudioClient          = null;
         private readonly AudioClientShareMode _AudioClientShareMode = AudioClientShareMode.Shared;
-        private readonly int                  _BufferDuration       = 10000000;
-        private int                           _BytesPerFrame        = -1;
         private Endpoint                      _Endpoint             = null;
         private EndpointDriverState           _EndpointDriverState  = EndpointDriverState.Unavailable;
         private MMDevice                      _MMDevice             = null;
@@ -35,26 +33,23 @@ namespace Unification.Models.Audio
         {
             if (Environment.OSVersion.Version.Major < 6)
             {
-                Exception NSE = new NotSupportedException("WASAPI supported only on Windows Vista and above");
-
-                State = EndpointDriverState.Unsupported;
-
                 if (StateChangedEvent != null)
-                    StateChangedEvent(this, new StateChangeEventArgs<EndpointDriverState>(State, EndpointDriverState.Unavailable, NSE));
+                    StateChangedEvent(this, 
+                                      new StateChangeEventArgs<EndpointDriverState>(State, 
+                                                                                    EndpointDriverState.Unavailable, 
+                                                                                    new NotSupportedException("WASAPI supported only on Windows Vista and above")));
 
-                throw NSE;
-            }
-
-            if (Endpoint == null)
-            {
-                AssignDefaultEndpoint();
+                _EndpointDriverState = EndpointDriverState.Unsupported;
             }
             else
             {
                 this.Endpoint = Endpoint;
-            }
 
-            OpenAudioClient();
+                if (this.Endpoint == null)
+                    AssignDefaultEndpoint();
+
+                OpenAudioClient();
+            }
         }
 
         /// <summary>
@@ -79,9 +74,7 @@ namespace Unification.Models.Audio
                 if (MMDev.GetGuid().Equals(Endpoint.Guid)) _MMDevice = MMDev;
 
             if (_MMDevice == null)
-            {
                 throw new NullReferenceException("Endpoint To MMDevice Mapping Exception");
-            }
         }
 
         /// <summary>
@@ -103,21 +96,31 @@ namespace Unification.Models.Audio
         /// </summary>
         public int BytesPerFrame
         {
+            private set;
+            get;
+        }
+
+        /// <summary>
+        /// Returns the number of audio channels available (1=Mono, 2=Stereo, etc).
+        /// </summary>
+        public int ChannelCount
+        {
             get
             {
-                if (_BytesPerFrame.Equals(-1))
-                    _BytesPerFrame = ((_AudioClient.MixFormat.Channels * _AudioClient.MixFormat.BitsPerSample) / 8);
-
-                return _BytesPerFrame;
+                return _AudioClient.MixFormat.Channels;
             }
         }
 
         public void Dispose()
         {
-            _AudioClient.Stop();
             State = EndpointDriverState.Unavailable;
-            _AudioClient.Dispose();
-            _AudioClient = null;
+
+            if (_AudioClient != null)
+            {
+                _AudioClient.Stop();
+                _AudioClient.Dispose();
+                _AudioClient = null;
+            }
         }
 
         /// <summary>
@@ -127,15 +130,15 @@ namespace Unification.Models.Audio
         {
             private set
             {
-                if (_Endpoint == null) 
-                    return;
-
-                if (!value.Guid.Equals(_Endpoint.Guid))
+                if (_Endpoint == null)
                 {
                     _Endpoint = value;
-
-                    if (!_Endpoint.Guid.Equals(_MMDevice.GetGuid()))
-                        AssignMMDeviceFromEndpoint();
+                    AssignMMDeviceFromEndpoint();
+                }
+                else if (!_Endpoint.Guid.Equals(value.Guid))
+                {
+                    _Endpoint = value;
+                    AssignMMDeviceFromEndpoint();
                 }
             }
 
@@ -179,13 +182,15 @@ namespace Unification.Models.Audio
         /// </summary>
         private void OpenAudioClient()
         {
-            _AudioClient = _MMDevice.AudioClient;
+            _AudioClient  = _MMDevice.AudioClient;
+            BytesPerFrame = ((_AudioClient.MixFormat.Channels * _AudioClient.MixFormat.BitsPerSample) / 8);
 
             _AudioClient.Initialize(_AudioClientShareMode, AudioClientStreamFlags.None,
-                                    _BufferDuration, 0, _MMDevice.AudioClient.MixFormat, 
-                                    Guid.Empty);
+                                    (_MMDevice.AudioClient.MixFormat.SampleRate * 10), 
+                                    0, _MMDevice.AudioClient.MixFormat, Guid.Empty);
 
             _AudioClient.Start();
+
             State = EndpointDriverState.Available;
         }
 
@@ -195,21 +200,32 @@ namespace Unification.Models.Audio
         /// <param name="AudioFramebuffer">Byte array containing audio data.</param>
         /// <param name="BytesToRead">Number of bytes written to AudioFramebuffer byte array.</param>
         /// <param name="FrameCount">Number of frames contained in AudioFramebuffer byte array.</param>
-        public bool RenderFramebuffer(byte[] AudioFramebuffer, int BytesToRead, int FrameCount)
+        public void RenderFramebuffer(byte[] AudioFramebuffer, int BytesToRead, int FrameCount)
         {
             if (_AudioClient != null && !BytesToRead.Equals(0))
             {
                 IntPtr DeviceFramebuffer = _AudioClient.AudioRenderClient.GetBuffer(FrameCount);
-
+                
                 Marshal.Copy(AudioFramebuffer, 0, DeviceFramebuffer, BytesToRead);
 
                 _AudioClient.AudioRenderClient.ReleaseBuffer(FrameCount, AudioClientBufferFlags.None);
 
-                Thread.Sleep(25);
-                return true;
+                Thread.Sleep(15);
             }
+        }
 
-            return false;
+        /// <summary>
+        /// Retrieves the sample rate (in Hertz) that the endpoint is currently functioning at.
+        /// </summary>
+        public int SampleRate
+        {
+            get
+            {
+                if (_AudioClient == null)
+                    return -1;
+
+                return _AudioClient.MixFormat.SampleRate;
+            }
         }
 
         /// <summary>

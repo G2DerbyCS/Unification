@@ -7,7 +7,7 @@ namespace Unification.Models.Audio.Interfaces
     /// <summary>
     /// Generic interface for all EnpointDrivers.
     /// </summary>
-    internal interface IEndpointDriver : IDisposable
+    internal interface IAudioEndpointDriver : IDisposable
     {
         /// <summary>
         /// Retrieves the current available capacity of the audio framebuffer associated with the endpoint.
@@ -18,6 +18,11 @@ namespace Unification.Models.Audio.Interfaces
         /// Retrieves the number of bytes accepted as an audio frame by the endpoint.
         /// </summary>
         int BytesPerFrame { get; }
+
+        /// <summary>
+        /// Retrieves the number of audio channels available on the endpoint (1=Mono, 2=Stereo, etc).
+        /// </summary>
+        int ChannelCount { get; }
 
         /// <summary>
         /// Indicates currently selected Endpoint.
@@ -40,7 +45,12 @@ namespace Unification.Models.Audio.Interfaces
         /// <param name="AudioFramebuffer">Byte array containing audio data.</param>
         /// <param name="BytesToRead">Number of bytes written to AudioFramebuffer byte array.</param>
         /// <param name="FrameCount">Number of frames contained in AudioFramebuffer byte array.</param>
-        bool RenderFramebuffer(byte[] AudioFramebuffer, int BytesToRead, int FrameCount);
+        void RenderFramebuffer(byte[] AudioFramebuffer, int BytesToRead, int FrameCount);
+
+        /// <summary>
+        /// Retrieves the sample rate (in Hertz) that the endpoint is currently functioning at.
+        /// </summary>
+        int SampleRate { get; }
 
         /// <summary>
         /// Assings Endpoint for audio output.

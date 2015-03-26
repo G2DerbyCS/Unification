@@ -70,15 +70,16 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Models\Audio\AudioPlaybackController.cs" />
+    <Compile Include="Models\Audio\ExtendedWaveStream.cs" />
+    <Compile Include="Models\Audio\NAudioPlaybackController.cs" />
     <Compile Include="Models\Audio\Endpoint.cs" />
     <Compile Include="Models\Audio\Enums\EndpointDriverStateEnum.cs" />
     <Compile Include="Models\Audio\EndpointDriverExtensions.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Models\Audio\Enums\PlaybackStateEnum.cs" />
-    <Compile Include="Models\Audio\Interfaces\IEndpointDriver.cs" />
-    <Compile Include="Models\Audio\Interfaces\IPlaybackController.cs" />
+    <Compile Include="Models\Audio\Interfaces\IAudioEndpointDriver.cs" />
+    <Compile Include="Models\Audio\Interfaces\IAudioPlaybackController.cs" />
     <Compile Include="Models\Audio\WASAPIDriver.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -8,7 +8,7 @@ namespace Unification.Models.Audio.Interfaces
     /// <summary>
     /// Generic interface for all playback controllers.
     /// </summary>
-    internal interface IPlaybackController
+    internal interface IAudioPlaybackController : IDisposable
     {
         /// <summary>
         /// Indicates current IMetadataContainer.
@@ -23,7 +23,7 @@ namespace Unification.Models.Audio.Interfaces
         /// <summary>
         /// The IEndpointDriver to output audio to.
         /// </summary>
-        IEndpointDriver EndpointDriver { set; get; }
+        IAudioEndpointDriver EndpointDriver { set; get; }
 
         /// <summary>
         /// Switches to next IMetadataContainer in DataSource.
@@ -64,6 +64,11 @@ namespace Unification.Models.Audio.Interfaces
         /// Stops playback.
         /// </summary>
         void Stop();
+
+        /// <summary>
+        /// Returns an array containing all file formats that can be handled by the IPlaybackController instance.
+        /// </summary>
+        string[] SupportedFileFormats { get; }
 
         /// <summary>
         /// Sets output volume.
