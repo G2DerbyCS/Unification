@@ -1,6 +1,5 @@
 ﻿using IUnification.Models.Interfaces;
 using System.Collections.Generic;
-using System.ComponentModel;
 using Unification.Models.Enums;
 
 namespace Unification.Models.Interfaces
@@ -8,13 +7,8 @@ namespace Unification.Models.Interfaces
     /// <summary>
     /// Generic interface for all Playlists.
     /// </summary>
-    internal interface IPlaylist : INotifyPropertyChanged
+    internal interface IPlaylist
     {
-        /// <summary>
-        /// Defines IPlaylist instance PlaylistContent end-reached action.
-        /// </summary>
-        PlaylistLoopMode LoopMode { set; get; }
-
         /// <summary>
         /// Defines criteria for selection of IMetadataContainers returned by GetNextContiner method.
         /// </summary>
@@ -33,6 +27,11 @@ namespace Unification.Models.Interfaces
         IMetadataContainer GetNextContainer();
 
         /// <summary>
+        /// Defines IPlaylist instance PlaylistContent end-reached action.
+        /// </summary>
+        PlaylistLoopMode LoopMode { set; get; }
+
+        /// <summary>
         /// Defines the order in which IMetadataContainers are selected by GetNextContainer method.
         /// </summary>
         PlaylistSequenceMode SequenceMode { set; get; }
@@ -41,6 +40,6 @@ namespace Unification.Models.Interfaces
         /// Assigns a list of IMetadataContainers to serve as the content for this IPlaylist instance.
         /// </summary>
         /// <param name="PlaylistContent">IMetadataContainer list.</param>
-        void SetPlaylistContent (ref IList<IMetadataContainer> PlaylistContent);
+        void SetPlaylistContent (ref List<IMetadataContainer> PlaylistContent);
     }
 }

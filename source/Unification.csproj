@@ -71,6 +71,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Models\Audio\ExtendedWaveStream.cs" />
+    <Compile Include="Models\MetadataPlaylist.cs" />
     <Compile Include="Models\Audio\NAudioPlaybackController.cs" />
     <Compile Include="Models\Audio\Endpoint.cs" />
     <Compile Include="Models\Audio\Enums\EndpointDriverStateEnum.cs" />
