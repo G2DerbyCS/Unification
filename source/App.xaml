@@ -1,7 +1,7 @@
 ﻿<Application x:Class="Unification.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             Startup="Application_Startup">
+             StartupUri="\Views\MainWindowView.xaml">
     <Application.Resources>
         <ResourceDictionary Source="pack://application:,,,/Libraries/Resources/ModernWindowFrameStyleRecourceDictionary.xaml"/>
     </Application.Resources>
