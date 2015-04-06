@@ -9,7 +9,7 @@ namespace Unification.Models.Plugins
     /// <summary>
     /// Scans for and instantiates types matching type specifier on List reference passed into LoadPlugins method.
     /// </summary>
-    internal class PluginLoader
+    internal sealed class PluginLoader
     {
         private Assembly _CurrentPluginAssembly;
         private String   _PluginsDirectory;
@@ -20,14 +20,14 @@ namespace Unification.Models.Plugins
         /// </summary>
         /// <typeparam name="T">Type Specifier.</typeparam>
         /// <param name="Instances">Generic ICollection instance to store type instances within</param>
-        public void LoadPlugins<T>(ref ICollection<T> Instances)
+        public void LoadPlugins<T>(ICollection<T> Instances)
         {
             try
             {
                 foreach (String PathToDll in Directory.EnumerateFiles(PluginsDirectory, "*.dll"))
                 {
                     _CurrentPluginAssembly = Assembly.LoadFrom(PathToDll);
-                    StoreTypeInstances(ref Instances);
+                    StoreTypeInstances(Instances);
                 }
 
                 if (LoadPluginsCompletedEvent != null)
@@ -51,7 +51,7 @@ namespace Unification.Models.Plugins
         public PluginLoader()
         {
             _CurrentPluginAssembly = null;
-            _PluginsDirectory      = "../Plugins";
+            PluginsDirectory       = "../Plugins";
         }
 
         /// <summary>
@@ -78,7 +78,7 @@ namespace Unification.Models.Plugins
         /// </summary>
         /// <typeparam name="T">Type Specifier.</typeparam>
         /// <param name="Instances">Generic ICollection instance to store type instances within.</param>
-        private void StoreTypeInstances<T>(ref ICollection<T> Instances)
+        private void StoreTypeInstances<T>(ICollection<T> Instances)
         {
             if (_CurrentPluginAssembly != null)
             {
@@ -90,7 +90,10 @@ namespace Unification.Models.Plugins
                         continue;
 
                     if (Type.GetInterface(typeof(T).FullName) != null)
-                        Instances.Add((T)Activator.CreateInstance(typeof(T)));
+                    {
+                        if (typeof(T).IsAssignableFrom(Type))
+                            Instances.Add((T)Activator.CreateInstance(Type));
+                    }
                 }
             }
         }

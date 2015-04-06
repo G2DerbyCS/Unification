@@ -91,6 +91,7 @@
     <Compile Include="Models\Interfaces\IPlaylist.cs" />
     <Compile Include="Models\Interfaces\IProgressIndicator.cs" />
     <Compile Include="Models\LoadingCompletedEventArgs.cs" />
+    <Compile Include="Models\Plugins\ContentPluginManager.cs" />
     <Compile Include="Models\Plugins\PluginLoader.cs" />
     <Compile Include="Models\StateChangeEventArgs.cs" />
     <Compile Include="Views\Controls\ProgressSlider.xaml.cs">
