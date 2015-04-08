@@ -2,100 +2,54 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using Unification.Models.Enums;
 
 namespace Unification.Models.Plugins
 {
     /// <summary>
-    /// Scans for and instantiates types matching type specifier on List reference passed into LoadPlugins method.
+    /// Scans for and instantiates classes from .ddl files in a directory.
     /// </summary>
-    internal sealed class PluginLoader
+    /// <typeparam name="T">Type Specifier.</typeparam>
+    internal sealed class PluginLoader<T>
     {
-        private Assembly _CurrentPluginAssembly;
-        private String   _PluginsDirectory;
-
         /// <summary>
-        /// Inspects PluginsDirectory .dll file assemblies for instantiable types matching types specifier,
-        /// storing type instances in the Instances argument.
+        /// Loads assemblies from .ddl files in the Directory and raises OnInstanceCreated event.
         /// </summary>
-        /// <typeparam name="T">Type Specifier.</typeparam>
-        /// <param name="Instances">Generic ICollection instance to store type instances within</param>
-        public void LoadPlugins<T>(ICollection<T> Instances)
+        /// <param name="Directory">Directory to scan for .dll files.</param>
+        public void LoadPluginsFrom(String Directory)
         {
-            try
+            foreach (String Dll in System.IO.Directory.EnumerateFiles(Directory, "*.dll"))
             {
-                foreach (String PathToDll in Directory.EnumerateFiles(PluginsDirectory, "*.dll"))
+                try
                 {
-                    _CurrentPluginAssembly = Assembly.LoadFrom(PathToDll);
-                    StoreTypeInstances(Instances);
-                }
-
-                if (LoadPluginsCompletedEvent != null)
-                    LoadPluginsCompletedEvent(this, new LoadingCompletedEventArgs(LoadingState.Complete));
-            }
-            catch (DirectoryNotFoundException DNFEx)
-            {
-                if (LoadPluginsCompletedEvent != null)
-                    LoadPluginsCompletedEvent(this, new LoadingCompletedEventArgs(LoadingState.Faild, DNFEx));
-            }
-        }
-
-        /// <summary>
-        /// An event to be raised when the loading process has been completed.
-        /// </summary>
-        public event EventHandler<LoadingCompletedEventArgs> LoadPluginsCompletedEvent;
-
-        /// <summary>
-        /// Constructor.
-        /// </summary>
-        public PluginLoader()
-        {
-            _CurrentPluginAssembly = null;
-            PluginsDirectory       = "../Plugins";
-        }
-
-        /// <summary>
-        /// Sets/Gets directory to be inspected when LoadPlugins method is called.
-        /// </summary>
-        public String PluginsDirectory
-        {
-            set
-            {
-                if (value == null)
-                    throw new ArgumentNullException("Plugins Directory Path Cannot be Null.");
-
-                _PluginsDirectory = value;
-            }
-
-            get
-            {
-                return _PluginsDirectory;
-            }
-        }
-
-        /// <summary>
-        /// Reads current assembly for instantiable types matching the type specifier.
-        /// </summary>
-        /// <typeparam name="T">Type Specifier.</typeparam>
-        /// <param name="Instances">Generic ICollection instance to store type instances within.</param>
-        private void StoreTypeInstances<T>(ICollection<T> Instances)
-        {
-            if (_CurrentPluginAssembly != null)
-            {
-                Type[] PluginAssemblyTypes = _CurrentPluginAssembly.GetTypes();
-
-                foreach (Type Type in PluginAssemblyTypes)
-                {
-                    if (Type.IsInterface || Type.IsAbstract)
-                        continue;
-
-                    if (Type.GetInterface(typeof(T).FullName) != null)
+                    foreach (Type ObjectType in Assembly.LoadFrom(Dll).GetTypes())
                     {
-                        if (typeof(T).IsAssignableFrom(Type))
-                            Instances.Add((T)Activator.CreateInstance(Type));
+                        if (!ObjectType.IsAbstract &&
+                            !ObjectType.IsInterface &&
+                            typeof(T).IsAssignableFrom(ObjectType))
+                            RaiseInstanceCreatedEvent(Dll, ObjectType);
                     }
                 }
+                catch (NullReferenceException)
+                {
+                    continue;
+                }
             }
+        }
+
+        /// <summary>
+        /// Event to be raised when an instance of a plugin is successfully created from a .dll file.
+        /// </summary>
+        public event EventHandler<PluginInstanceCreatedEventArgs<T>> OnInstanceCreatedEvent;
+
+        /// <summary>
+        /// Raises OnInstanceCreated event if OnInstanceCreatedEvent not null.
+        /// </summary>
+        /// <param name="Instance">New plugin instance.</param>
+        private void RaiseInstanceCreatedEvent(string SourceDll, Type ObjectType)
+        {
+            if (OnInstanceCreatedEvent != null)
+                OnInstanceCreatedEvent(this, new PluginInstanceCreatedEventArgs<T>(SourceDll, 
+                                                                                   (T)Activator.CreateInstance(ObjectType)));
         }
     }
 }
