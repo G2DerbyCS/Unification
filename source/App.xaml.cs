@@ -1,5 +1,4 @@
 ﻿using System.Windows;
-using Unification.Views;
 
 namespace Unification
 {
