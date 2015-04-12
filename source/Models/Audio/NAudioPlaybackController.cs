@@ -163,7 +163,15 @@ namespace Unification.Models.Audio
                 }
                 else
                 {
-                    throw new NotImplementedException("Decompressed Audio Data Format Incompatible With Endpoint.");
+                    try
+                    {
+                        _WaveStream = new ExtendedWaveStream(new NAudio.Wave.ResamplerDmoStream(BaseWaveStreamObj, 
+                                                                                                new NAudio.Wave.WaveFormat(EndpointDriver.SampleRate, EndpointDriver.ChannelCount)));
+                    }
+                    catch(Exception)
+                    {
+                        throw new NotImplementedException("Decompressed Audio Data Format Incompatible With Endpoint.");
+                    }
                 }
 
                 SetWaveStreamVolume();
