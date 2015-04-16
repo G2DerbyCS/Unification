@@ -2,42 +2,64 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.Security.Cryptography;
 
 namespace Unification.Models.Plugins
 {
     /// <summary>
-    /// Scans for and instantiates classes from .ddl files in a directory.
+    /// Scans for and instantiates classes from a .ddl file.
     /// </summary>
     /// <typeparam name="T">Type Specifier.</typeparam>
     internal sealed class PluginLoader<T>
     {
         /// <summary>
-        /// Loads assemblies from .ddl files in the Directory and raises OnInstanceCreated event.
+        /// Attempts to generate a SHA1 hash of the .dll file being read.
         /// </summary>
-        /// <param name="Directory">Directory to scan for .dll files.</param>
-        public void LoadPluginsFrom(String Directory)
+        /// <param name="DllPath">.dll file path.</param>
+        private void ComputeDllFileHash(String DllPath)
         {
-            foreach (String Dll in System.IO.Directory.EnumerateFiles(Directory, "*.dll"))
+            try 
             {
-                try
+                using (FileStream                FileStream            = new FileStream(DllPath, FileMode.Open))
+                using (SHA1CryptoServiceProvider CryptoServiceProvider = new SHA1CryptoServiceProvider())
                 {
-                    foreach (Type ObjectType in Assembly.LoadFrom(Dll).GetTypes())
-                    {
-                        if (!ObjectType.IsAbstract &&
-                            !ObjectType.IsInterface &&
-                            typeof(T).IsAssignableFrom(ObjectType))
-                            RaiseInstanceCreatedEvent(Dll, ObjectType);
-                    }
+                    DllFileHash = CryptoServiceProvider.ComputeHash(FileStream);
                 }
-                catch (NullReferenceException)
-                {
-                    continue;
-                }
+            }
+            catch (IOException)
+            {
+                DllFileHash = null;
             }
         }
 
         /// <summary>
-        /// Event to be raised when an instance of a plugin is successfully created from a .dll file.
+        /// A SHA1 hash of the .dll file.
+        /// </summary>
+        public Byte[] DllFileHash
+        {
+            private set;
+            get;
+        }
+
+        /// <summary>
+        /// Inspects the passed .dll file for instantiable classes matching the PluginLoadder instance type specifier.
+        /// </summary>
+        /// <param name="Dll">Dll file to inspect.</param>
+        public void LoadPluginsFrom(String DllPath)
+        {
+            ComputeDllFileHash(DllPath);
+
+            foreach (Type ObjectType in Assembly.LoadFrom(DllPath).GetTypes())
+            {
+                if (!ObjectType.IsAbstract &&
+                    !ObjectType.IsInterface &&
+                    typeof(T).IsAssignableFrom(ObjectType))
+                    RaiseInstanceCreatedEvent(DllPath, ObjectType);
+            }
+        }
+
+        /// <summary>
+        /// Event to be raised when an instance of a plugin is successfully created from the .dll file.
         /// </summary>
         public event EventHandler<PluginInstanceCreatedEventArgs<T>> OnInstanceCreatedEvent;
 
@@ -48,8 +70,9 @@ namespace Unification.Models.Plugins
         private void RaiseInstanceCreatedEvent(string SourceDll, Type ObjectType)
         {
             if (OnInstanceCreatedEvent != null)
-                OnInstanceCreatedEvent(this, new PluginInstanceCreatedEventArgs<T>(SourceDll, 
-                                                                                   (T)Activator.CreateInstance(ObjectType)));
+                OnInstanceCreatedEvent(this, new PluginInstanceCreatedEventArgs<T>(DllFileHash, 
+                                                                                   (T)Activator.CreateInstance(ObjectType), 
+                                                                                   SourceDll));
         }
     }
 }

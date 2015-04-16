@@ -71,6 +71,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Models\Audio\ExtendedWaveStream.cs" />
+    <Compile Include="Models\Plugins\ContentPluginLoader.cs" />
     <Compile Include="Models\Plugins\Enums\AsynchronousPStateEnum.cs" />
     <Compile Include="Models\Plugins\PluginInstanceCreatedEventArgs.cs" />
     <Compile Include="Models\MetadataPlaylist.cs" />
@@ -93,10 +94,9 @@
     <Compile Include="Models\Interfaces\IPlaylist.cs" />
     <Compile Include="Models\Interfaces\IProgressIndicator.cs" />
     <Compile Include="Models\LoadingCompletedEventArgs.cs" />
-    <Compile Include="Models\Plugins\PluginInstanceWrapper.cs" />
+    <Compile Include="Models\Plugins\ContentPluginInstanceWrapper.cs" />
     <Compile Include="Models\Plugins\PluginLoader.cs" />
-    <Compile Include="Models\Plugins\UnificationPluginInstanceWrapperExtensions.cs" />
-    <Compile Include="Models\Plugins\UnificationPluginManager.cs" />
+    <Compile Include="Models\Plugins\ContentPluginMonitor.cs" />
     <Compile Include="Models\StateChangeEventArgs.cs" />
     <Compile Include="Views\Controls\ProgressSlider.xaml.cs">
       <DependentUpon>ProgressSlider.xaml</DependentUpon>

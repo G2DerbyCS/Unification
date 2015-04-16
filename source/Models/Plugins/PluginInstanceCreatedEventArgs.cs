@@ -14,19 +14,25 @@ namespace Unification.Models.Plugins
         public readonly T Instance;
 
         /// <summary>
-        /// Path to the .dll file object instance was loaded from.
+        /// Path to the .dll file the object instance was loaded from.
         /// </summary>
         public readonly String SourceDll;
+
+        /// <summary>
+        /// A SHA1 hash of the .dll file the object instance was loaded from.
+        /// </summary>
+        public readonly Byte[] DllFileHash;
 
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="SourceDll">Path to .dll file.</param>
         /// <param name="Instance">Object instance.</param>
-        public PluginInstanceCreatedEventArgs(String SourceDll, T Instance)
+        public PluginInstanceCreatedEventArgs(Byte[] DllFileHash, T Instance, String SourceDll)
         {
-            this.Instance  = Instance;
-            this.SourceDll = SourceDll;
+            this.DllFileHash = DllFileHash;
+            this.Instance    = Instance;
+            this.SourceDll   = SourceDll;
         }
     }
 }
