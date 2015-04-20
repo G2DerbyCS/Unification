@@ -1,5 +1,7 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using Unification.Models.Plugins;
+using Unification.Properties;
 
 namespace Unification
 {
@@ -10,11 +12,34 @@ namespace Unification
     {
         protected override void OnExit(ExitEventArgs e)
         {
+            ShutdownContentSystem();
+
+            base.OnExit(e);
+        }
+
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            base.OnStartup(e);
+
+            StartupContentSystem();
+        }
+
+        private void ShutdownContentSystem()
+        {
             ContentPluginMonitor.Hault();
             ContentPluginLoader.UnloadAllPluginInstances();
             ContentPluginLoader.UnWatchAllDirectories();
+        }
 
-            base.OnExit(e);
+        private void StartupContentSystem()
+        {
+            foreach (String DirectoryPath in Settings.Default.ContentPluginDirectorires.Split('|'))
+            {
+                if (!String.IsNullOrEmpty(DirectoryPath))
+                    ContentPluginLoader.WatchDirectory(DirectoryPath);
+            }
+
+            ContentPluginMonitor.Init();
         }
     }
 }

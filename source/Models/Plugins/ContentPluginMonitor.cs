@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using Unification.Models.Plugins.Enums;
+using Unification.Properties;
 
 namespace Unification.Models.Plugins
 {
@@ -22,7 +23,7 @@ namespace Unification.Models.Plugins
         /// </summary>
         static ContentPluginMonitor()
         {
-            UpdateInterval = TimeSpan.FromMinutes(2);
+            UpdateInterval = Settings.Default.ContentUpdateInterval;
         }
 
         /// <summary>
